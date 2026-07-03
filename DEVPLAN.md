@@ -1088,3 +1088,49 @@ IDD fallback. Verified: pytest 27/27, `grep -ri uxui tech-audit/` empty,
 D12 sentence reads "— is not covered here. For a rendered-interface
 review, use a browser-based capture.", D16 continuation lines at column 0.
 Supersedes M20's uxui-audit fold-in delegation; the 0–4 scale survives.
+
+## Follow-up — Cross-skill coherence (2026-07-03)
+
+### M29: Close the coherence gaps — debt readers, forge-flow-shaped stubs, confidence policy note
+
+**Why:** The cross-skill coherence check (2026-07-03) found three
+divergences. (1) forge-flow registers debt rows with dim `D01`, `D10` or
+`D14`, but only D01 reads `.tech-audit/debt.tsv` — a performance or
+correctness ponytail is registered and then ignored, so D10/D14 can flag
+the very trade-off the user declared intentional. (2)
+`scripts/_findings_to_milestones.py` emits stubs shaped `## MID — title`
+with Source/Why/Scope/Exit gate/Effort, while the devplan executor this
+skill hands off to expects `## MNN: title` with Why/Approach/Tasks/Done
+when and bans time estimates — the free-string Effort line lands verbatim
+in an executable devplan. (3) The "a 4 tagged needs-verification is still
+a 4" policy reads as a contradiction next to screenshot-based audits that
+cap unproven catastrophics — the choice is right but undocumented.
+
+**Approach:** (1) Promote the debt cross-reference to a pipeline rule:
+one line in `SKILL.md` § Findings pipeline — load `.tech-audit/debt.tsv`
+once per run and filter EVERY dimension's findings per D01's
+Debt-register cross-reference contract (active row suppresses, expired
+row promotes 🔴); D01 stays the contract's single source. (2) Align the
+stub template in `_findings_to_milestones.py`: heading `## <MID>: <title>`,
+fields Why / Tasks (checkboxes) / Done when; provenance moves to a Notes
+line; drop Effort from stubs (it stays in the triage table only). Update
+the pytest expectations red-first (TDD). (3) One sentence in
+`templates/finding-phrasing.md` § Severity vs confidence stating why
+severity and confidence stay independent axes here (verification is
+usually possible in triage), phrased generically — no sibling-skill
+references (the payload stays decoupled).
+
+**Tasks:**
+- [ ] SKILL.md § Findings pipeline: debt-register filter rule for every dimension (D01 contract as single source)
+- [ ] _findings_to_milestones.py: stub template → `## MID: title`, Why/Tasks/Done when, Notes for provenance, no Effort
+- [ ] tests: extend the pytest suite red-first (stub shape asserts: colon heading, "Done when", no "**Effort**" line; content test pinning the pipeline debt rule)
+- [ ] finding-phrasing.md § Severity vs confidence: one-line rationale for the independent-axes policy
+- [ ] Full pytest suite green
+- [ ] Commit & push
+- [ ] Deploy: `./install.sh --target all --force` + `--check` OK on all targets
+
+**Done when:** A D10/D14 debt row demonstrably suppresses/promotes per
+the pipeline rule (fixture walk recorded in Notes); generated stubs parse
+as forge-flow-shaped milestones with no Effort line (pinned by pytest);
+the confidence-policy rationale is one grep-able sentence; suite green;
+deployed to all targets.
