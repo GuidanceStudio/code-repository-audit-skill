@@ -668,7 +668,7 @@ audit, and cross-referencing the debt-tracking file populated by devplan.
 
 Recommended order: M17 → M18 → M19.
 
-### M17: Comment essentiality — flag dead-weight comments in D01
+### M17: Comment essentiality — flag dead-weight comments in D01 ✅
 
 **Why:** D01 already hunts dead code, unearned abstractions, and
 duplication. But a comment that restates the code verbatim is debt too:
@@ -708,7 +708,7 @@ only inline and docstring comments that restate the implementation.
 `shrink:` findings for comments that restate the code, and CI verifies
 the method is present.
 
-### M18: `ponytail:` recognition — audit-aware intentional shortcuts
+### M18: `ponytail:` recognition — audit-aware intentional shortcuts ✅
 
 **Why:** Today D01 doesn't know `ponytail:` comments exist. If it finds
 an O(n) linear scan, it flags it as a potential problem — even when the
@@ -747,7 +747,7 @@ unit, and upgrade path. Then:
 related findings (ceiling not reached) or promotes them to 🔴 (ceiling
 exceeded), and CI verifies the method contract.
 
-### M19: Debt tracking cross-reference — `.code-audit/debt.tsv` in the audit loop
+### M19: Debt tracking cross-reference — `.code-audit/debt.tsv` in the audit loop ✅
 
 **Why:** The `.code-audit/debt.tsv` file populated by devplan (M23) is
 useless if the audit doesn't read it. D01 must cross-reference its
@@ -787,6 +787,12 @@ many real findings need attention.
 **Done when:** a D01 pass on a repo with `.code-audit/debt.tsv`
 suppresses findings covered by active debt, reactivates expired debt
 as 🔴, and reports the suppressed count; CI verifies the contract.
+
+**Notes:** Heading marker reconciled 2026-07-03 (work shipped and
+verified at the time — commit `3bcd94b`, 27/27 tests). Path drift: the
+rename commit `3563276` later moved D01's cross-reference to
+`.tech-audit/debt.tsv`, so the Done-when's `.code-audit/` wording is
+historical; the live seam is tracked by M21 + forge-flow M43.
 
 ---
 
@@ -833,35 +839,31 @@ emoji shorthand; D15/D16 fold uxui-audit findings without manual mapping.
 
 ### M21: Align audit directories — `.code-audit/` vs `.tech-audit/`
 
-**Why:** `forge-flow` writes intentional debt to `.code-audit/debt.tsv`
-(M23), but tech-audit uses `.tech-audit/work/` and `.tech-audit/accepted.tsv`
-for its own findings. M19 already teaches D01 to cross-reference
-`.code-audit/debt.tsv` — but that path was written assuming the forge-flow
-directory. If the target repo has both a forge-flow-generated
-`.code-audit/debt.tsv` and a tech-audit `.tech-audit/` tree, there are
-two audit-adjacent directories with different prefixes. This is confusing
-and fragile.
+**Why:** (premise updated 2026-07-03 — the original text predated the
+`3563276` rename) tech-audit's own tree has already migrated to
+`.tech-audit/`: D01's debt cross-reference reads `.tech-audit/debt.tsv`
+and pytest pins that path. forge-flow however still writes
+`.code-audit/debt.tsv`, so the bridge M19 built is silently dead — debt
+registered by forge-flow is invisible to D01 suppression.
 
-**Approach:** Assess whether to:
-- (A) unify on one prefix (e.g. `.code-audit/` for everything), or
-- (B) keep both but document the relationship clearly in both skills.
-
-Option A is cleaner but requires updating forge-flow M23 and tech-audit
-work paths; option B is lower-cost. Decide in the M21 implementation.
-At minimum, add a cross-reference in both skills' README and SKILL.md
-so nobody is surprised by the other directory.
+**Approach:** Decision taken: unify on `.tech-audit/` (option A; the
+tech-audit side is already there). The write-side fix lands in
+**forge-flow M43** (renames its two payload sites + test anchor). This
+milestone closes the seam from the tech-audit side: verify end-to-end
+that D01 reads what forge-flow writes, and add the one-line
+cross-reference in both skills' docs so neither is surprised by the
+other's artifacts.
 
 **Tasks:**
-- [ ] Decide on unification (A) or documentation (B)
-- [ ] Update affected paths in tech-audit (findings.tsv, accepted.tsv, work dirs)
-- [ ] Update forge-flow M23 if path changes
-- [ ] Add cross-reference in README.md and SKILL.md of both skills
+- [ ] Verify forge-flow M43 shipped (its payload writes `.tech-audit/debt.tsv`)
+- [ ] End-to-end check: a repo with a forge-flow-written `.tech-audit/debt.tsv` gets D01 suppression/expiry per M19's contract
+- [ ] Add the cross-reference line in tech-audit README/SKILL.md (and confirm forge-flow's docs name `.tech-audit/`)
 - [ ] crossref linter green; full pytest suite green
 - [ ] Commit & push
 
-**Done when:** The relationship between `.code-audit/` and `.tech-audit/`
-is documented (or they are unified), and neither skill is surprised by
-the other's artifacts.
+**Done when:** One directory prefix (`.tech-audit/`) across both skills;
+the D01 debt bridge demonstrably works end-to-end; both skills'
+docs cross-reference it.
 
 ---
 
@@ -872,7 +874,10 @@ compression and deduplication. Same concepts, same behavior, fewer tokens.
 
 Recommended order: M22 → M23 → M24 → M25 → M26.
 
-### M22: Compress finding-phrasing.md — tone vignettes, severity-vs-confidence, Bad→Good table
+> Shipped in commit `2ebc907`; checkboxes reconciled 2026-07-03 after the
+> review verified each Done-when mechanically (line counts + content).
+
+### M22: Compress finding-phrasing.md — tone vignettes, severity-vs-confidence, Bad→Good table ✅
 
 **Why:** Three tone vignettes (Alarmist/Patronizing/Smug) take 32 lines with
 full "bad" quote + explanation + "better" quote. Severity-vs-confidence takes
@@ -888,17 +893,17 @@ bullet list. "Never quote a secret" is 6 lines for a 1-line rule.
 - Phrasing template: compress from 13 lines to 5
 
 **Tasks:**
-- [ ] Compress tone vignettes (lines 5-36) to 4 lines
-- [ ] Compress severity-vs-confidence (lines 73-86) to 3 lines
-- [ ] Remove Bad→Good table (lines 148-155)
-- [ ] Compress "Never quote a secret" (lines 88-93) to 1 line
-- [ ] Compress calibrations (lines 100-124) to bullet list
-- [ ] Compress phrasing template (lines 39-51) to 5 lines
-- [ ] Commit & push
+- [x] Compress tone vignettes (lines 5-36) to 4 lines
+- [x] Compress severity-vs-confidence (lines 73-86) to 3 lines
+- [x] Remove Bad→Good table (lines 148-155)
+- [x] Compress "Never quote a secret" (lines 88-93) to 1 line
+- [x] Compress calibrations (lines 100-124) to bullet list
+- [x] Compress phrasing template (lines 39-51) to 5 lines
+- [x] Commit & push
 
 **Done when:** `finding-phrasing.md` is ~70 lines (from ~163).
 
-### M23: Compress SKILL.md — Topics column, meta-commentary, stack detection, pipeline
+### M23: Compress SKILL.md — Topics column, meta-commentary, stack detection, pipeline ✅
 
 **Why:** Registry Topics column restates dimension titles. "13-dimension
 framing in older prose is historical" is a changelog entry. Stack detection
@@ -913,16 +918,19 @@ pipeline prose is verbose.
 - Compress findings pipeline + repeat-audit memory sections
 
 **Tasks:**
-- [ ] Drop Topics column from registry
-- [ ] Delete historical meta-commentary line
-- [ ] Compress stack detection paragraph
-- [ ] Compress severity table
-- [ ] Compress findings pipeline prose
-- [ ] Commit & push
+- [x] Drop Topics column from registry
+- [x] Delete historical meta-commentary line
+- [x] Compress stack detection paragraph
+- [x] Compress severity table
+- [x] Compress findings pipeline prose
+- [x] Commit & push
 
 **Done when:** SKILL.md is ~140 lines (from ~172).
 
-### M24: Compress D01 — shell code blocks, redundant commentary
+**Notes:** Reconciled 2026-07-03. Deviation: the severity table kept its
+Label column (the Done-when — SKILL.md ~140 lines — is met regardless).
+
+### M24: Compress D01 — shell code blocks, redundant commentary ✅
 
 **Why:** D01 has ~40 lines of multi-line shell snippets (dead-tree scan:
 5-line loop, directory hygiene: 6-line loop). The LLM doesn't need code
@@ -933,14 +941,14 @@ Move complex pipelines to `scripts/` and reference them. Remove redundant
 commentary that restates the dimension's purpose.
 
 **Tasks:**
-- [ ] Compress dead-tree scan from 6 lines to 1
-- [ ] Compress directory hygiene from 6 lines to 1
-- [ ] Remove redundant commentary
-- [ ] Commit & push
+- [x] Compress dead-tree scan from 6 lines to 1
+- [x] Compress directory hygiene from 6 lines to 1
+- [x] Remove redundant commentary
+- [x] Commit & push
 
 **Done when:** D01 shell code is compact; same methods, fewer tokens.
 
-### M25: Deduplicate cuts + operations — remove dimension-treatment restatements
+### M25: Deduplicate cuts + operations — remove dimension-treatment restatements ✅
 
 **Why:** `full.md` and `operations.md` restate dimension-treatment semantics
 (`always-deep`, `scan`, etc.) already defined in SKILL.md registry. `full.md`
@@ -954,15 +962,15 @@ from SKILL.md.
 - `operations.md`: replace treatment prose with registry reference
 
 **Tasks:**
-- [ ] Compress full.md dimension-treatment section
-- [ ] Compress full.md findings pipeline reference
-- [ ] Compress full.md fan-out section
-- [ ] Compress operations.md treatment section
-- [ ] Commit & push
+- [x] Compress full.md dimension-treatment section
+- [x] Compress full.md findings pipeline reference
+- [x] Compress full.md fan-out section
+- [x] Compress operations.md treatment section
+- [x] Commit & push
 
 **Done when:** Dimension treatment defined once in SKILL.md; cuts and operations reference it.
 
-### M26: Trim READMEs
+### M26: Trim READMEs ✅
 
 **Why:** README contains redundant install instructions and dimension descriptions
 that duplicate SKILL.md.
@@ -971,8 +979,8 @@ that duplicate SKILL.md.
 SKILL.md for the full registry.
 
 **Tasks:**
-- [ ] Compress top-level `README.md`
-- [ ] Commit & push
+- [x] Compress top-level `README.md`
+- [x] Commit & push
 
 **Done when:** README conveys same information with fewer words.
 
@@ -1017,3 +1025,33 @@ forced to `needs-verification` or rewritten to the observed fact.
 even though those checkboxes still show unchecked — reconcile that
 bookkeeping (verify each Done-when, tick, mark headings) before or together
 with this milestone. M27 edits the compressed text directly.
+*(Update 2026-07-03: bookkeeping reconciled.)*
+
+## Follow-up — Standalone decoupling (2026-07-03)
+
+### M28: Commit the uxui-audit decoupling — standalone payload
+
+**Why:** The worktree carries deliberate uncommitted edits (SKILL.md, D12,
+D15, D16) removing every cross-reference to the sibling uxui-audit skill so
+tech-audit can be published standalone (intent confirmed by the user,
+2026-07-03). The review verified the decoupling is complete — no orphan
+`uxui` reference would survive in the shipped payload — but the work is
+untracked by any milestone, supersedes M20's recorded fold-in mechanism
+(the shared 0–4 severity scale itself survives), and introduced two typos.
+
+**Approach:** Fix the two defects inside the pending diff — D12:148-149
+dangling article ("…is the / not covered here"), D16:109-113 stray 2-space
+continuation-line indents — re-run the pytest suite (crossref linter
+included), then commit the four files with a message recording that this
+supersedes M20's fold-in delegation. M20 itself stays untouched (completed
+milestones are history; this milestone is the record).
+
+**Tasks:**
+- [ ] D12-admin-surface.md: fix the dangling "is the / not covered here" sentence
+- [ ] D16-ui-design-system.md: normalize the continuation-line indents
+- [ ] Test: full pytest suite green with the diff applied (27/27)
+- [ ] Test: `grep -ri uxui tech-audit/` returns nothing (payload only; DEVPLAN excluded)
+- [ ] Commit the 4-file decoupling diff & push
+
+**Done when:** The decoupling diff is committed and pushed with the two
+typos fixed; payload greps clean for `uxui`; pytest green.
