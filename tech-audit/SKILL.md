@@ -111,6 +111,7 @@ Long audits outlive a single context window. Persist as you go, verify before em
 
 - **Accepted-findings baseline** — `.tech-audit/accepted.tsv`: one row per dismissed finding, key = `dim␟location␟title-slug`, plus severity, reason, date, optional `revisit-by`. Every cut filters against it; past `revisit-by` entries resurface. Dismissal flow: `playbooks/false-positives.md`.
 - **Mechanical deltas** — diff current `findings.tsv` against most recent prior: new / fixed / still-open per severity. Trend section from that diff, not from re-reading old prose.
+- **Debt register** — `.tech-audit/debt.tsv` (may be populated by the forge-flow skill's simplify pass): D1 suppresses findings covered by active rows, promotes expired ones to 🔴 (see `dimensions/D01-code-essentiality.md`).
 
 ## Execution discipline (applies to every cut)
 

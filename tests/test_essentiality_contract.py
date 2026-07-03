@@ -112,3 +112,14 @@ def test_d1_has_debt_register_cross_reference() -> None:
     assert "revisit_by" in d1
     assert "expired" in d1.lower()  # reactivates expired debt
     assert "suppressed:" in d1.lower()  # reports suppressed count
+
+
+# ---- M21: the debt bridge is cross-referenced in both skills' docs ----
+
+
+def test_debt_bridge_names_forge_flow_in_router_and_readme() -> None:
+    for doc in (ROUTER, README):
+        assert any(
+            ".tech-audit/debt.tsv" in para and "forge-flow" in para
+            for para in doc.read_text().split("\n\n")
+        ), f"{doc.name} missing the forge-flow debt.tsv cross-reference"

@@ -837,7 +837,7 @@ Emoji stay as visual shorthand: 4🔴 / 3🟡 / 0-2🟢.
 **Done when:** Both audit skills document the same 0–4 severity scale with
 emoji shorthand; D15/D16 fold uxui-audit findings without manual mapping.
 
-### M21: Align audit directories — `.code-audit/` vs `.tech-audit/`
+### M21: Align audit directories — `.code-audit/` vs `.tech-audit/` ✅
 
 **Why:** (premise updated 2026-07-03 — the original text predated the
 `3563276` rename) tech-audit's own tree has already migrated to
@@ -855,15 +855,30 @@ cross-reference in both skills' docs so neither is surprised by the
 other's artifacts.
 
 **Tasks:**
-- [ ] Verify forge-flow M43 shipped (its payload writes `.tech-audit/debt.tsv`)
-- [ ] End-to-end check: a repo with a forge-flow-written `.tech-audit/debt.tsv` gets D01 suppression/expiry per M19's contract
-- [ ] Add the cross-reference line in tech-audit README/SKILL.md (and confirm forge-flow's docs name `.tech-audit/`)
-- [ ] crossref linter green; full pytest suite green
-- [ ] Commit & push
+- [x] Verify forge-flow M43 shipped (its payload writes `.tech-audit/debt.tsv`)
+- [x] End-to-end check: a repo with a forge-flow-written `.tech-audit/debt.tsv` gets D01 suppression/expiry per M19's contract
+- [x] Add the cross-reference line in tech-audit README/SKILL.md (and confirm forge-flow's docs name `.tech-audit/`)
+- [x] crossref linter green; full pytest suite green
+- [x] Commit & push
 
 **Done when:** One directory prefix (`.tech-audit/`) across both skills;
 the D01 debt bridge demonstrably works end-to-end; both skills'
 docs cross-reference it.
+
+**Notes:** Done 2026-07-03, TDD: contract test
+`test_debt_bridge_names_forge_flow_in_router_and_readme` written first
+(red), then the SKILL.md § Repeat-audit memory bullet + README boundary
+line to green (suite 32/32, ruff clean). M43 evidence (read-only):
+forge-flow commit `1e38ebd`; `EXECUTOR-CORE.md:112` (debt registration)
+and `:329` (completion recap) name `.tech-audit/debt.tsv`;
+`grep -rn '.code-audit' forge-flow/ tests/` on that repo returns nothing.
+End-to-end walk (scratchpad fixture, forge-flow schema
+`dim⇥location⇥title⇥ceiling⇥revisit_by`): the active row
+(revisit_by 2027-01-01) suppressed its matching finding with
+`suppressed: 1` in the summary; the expired row (revisit_by 2026-01-01)
+promoted its finding to 🔴 "intentional debt expired on 2026-01-01" —
+per M19's contract at D01:137-150. Redeployed via
+`install.sh --target claude --force`; `--check` OK.
 
 ---
 
