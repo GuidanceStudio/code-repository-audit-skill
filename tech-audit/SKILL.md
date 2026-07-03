@@ -105,13 +105,14 @@ Long audits outlive a single context window. Persist as you go, verify before em
 - **Resume.** If today's `findings.tsv` exists, read it, skip dimensions already represented, continue.
 - **Refute every 🔴.** Re-read the actual code path and prove it wrong: is auth handled upstream? is the path dead? is validation done elsewhere? Refuted → drop/downgrade. Can't verify without runtime → mark `confidence: needs-verification`. Mandatory for 🔴 — single biggest false-positive reducer.
 - **🟡 requires the cited code path read.** A grep/pattern match alone caps confidence at `needs-verification`.
+- **Debt filter (every dimension).** Load `.tech-audit/debt.tsv` once per run and filter EVERY dimension's findings per the Debt-register cross-reference contract in `dimensions/D01-code-essentiality.md` (single source): an active row suppresses the finding into the suppressed counter; an expired `revisit_by` promotes it to 🔴.
 - **Milestone prefix.** Match the target devplan's ID scheme: `scripts/_findings_to_milestones.py --prefix M --start <next>`. Don't default to `AUDIT`.
 
 ### Repeat-audit memory
 
 - **Accepted-findings baseline** — `.tech-audit/accepted.tsv`: one row per dismissed finding, key = `dim␟location␟title-slug`, plus severity, reason, date, optional `revisit-by`. Every cut filters against it; past `revisit-by` entries resurface. Dismissal flow: `playbooks/false-positives.md`.
 - **Mechanical deltas** — diff current `findings.tsv` against most recent prior: new / fixed / still-open per severity. Trend section from that diff, not from re-reading old prose.
-- **Debt register** — `.tech-audit/debt.tsv` (may be populated by the forge-flow skill's simplify pass): D1 suppresses findings covered by active rows, promotes expired ones to 🔴 (see `dimensions/D01-code-essentiality.md`).
+- **Debt register** — `.tech-audit/debt.tsv` (may be populated by the forge-flow skill's simplify pass): applied to every dimension by the pipeline debt filter above; contract in `dimensions/D01-code-essentiality.md`.
 
 ## Execution discipline (applies to every cut)
 

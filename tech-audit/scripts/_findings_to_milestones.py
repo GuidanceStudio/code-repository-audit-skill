@@ -15,7 +15,9 @@ Usage:
 
 Outputs:
     1. A triage table (markdown).
-    2. One milestone stub per 🔴 finding (sub-tasks for 🟡 grouped under their dim).
+    2. One executor-shaped milestone stub per 🔴 (`## <MID>: <title>`,
+       Why/Tasks/Done when/Notes; 🟡 grouped per dim; effort stays in the
+       triage table only — executable devplans carry no estimates).
 """
 from __future__ import annotations
 
@@ -100,15 +102,14 @@ def render_milestone_stubs(findings: list[Finding], milestone_map: dict[tuple[st
         mid = milestone_map.get(finding_key(f), f"AUDIT-{i + 1}")
         conf = f", confidence: {f.confidence}" if f.confidence else ""
         out.append(
-            f"## {mid} — {f.title}\n\n"
-            f"**Source**: audit finding {f.severity} @ `{f.location}` (dim {f.dim}{conf}).\n\n"
-            f"**Why**: <one paragraph explaining the impact in plain language>\n\n"
-            f"**Scope**:\n"
+            f"## {mid}: {f.title}\n\n"
+            f"**Why:** <one paragraph explaining the impact in plain language>\n\n"
+            f"**Tasks:**\n"
             f"- [ ] {f.fix}\n"
             f"- [ ] Add a regression test that pins this fix.\n"
             f"- [ ] Update related docs if the change affects operator behavior.\n\n"
-            f"**Exit gate**: the audit re-runs clean on this finding.\n\n"
-            f"**Effort**: {f.effort}.\n"
+            f"**Done when:** the audit re-runs clean on this finding.\n\n"
+            f"**Notes:** audit finding {f.severity} @ `{f.location}` (dim {f.dim}{conf}).\n"
         )
 
     # Group yellows by dim
@@ -117,11 +118,14 @@ def render_milestone_stubs(findings: list[Finding], milestone_map: dict[tuple[st
         yellows_by_dim.setdefault(f.dim, []).append(f)
 
     for dim, items in sorted(yellows_by_dim.items()):
-        out.append(f"## AUDIT-{dim}-followup — {dim} 🟡 cleanup\n")
-        out.append("**Source**: audit pass.\n\n**Scope**:\n")
-        for f in items:
-            out.append(f"- [ ] `{f.location}` — {f.title}. Fix: {f.fix}. ({f.effort})")
-        out.append("")
+        tasks = "\n".join(f"- [ ] `{f.location}` — {f.title}. Fix: {f.fix}." for f in items)
+        out.append(
+            f"## AUDIT-{dim}-followup: {dim} 🟡 cleanup\n\n"
+            f"**Why:** <one paragraph explaining the impact in plain language>\n\n"
+            f"**Tasks:**\n{tasks}\n\n"
+            f"**Done when:** the audit re-runs clean on these findings.\n\n"
+            f"**Notes:** grouped 🟡 audit findings (dim {dim}).\n"
+        )
 
     return "\n".join(out)
 

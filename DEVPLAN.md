@@ -1091,7 +1091,7 @@ Supersedes M20's uxui-audit fold-in delegation; the 0–4 scale survives.
 
 ## Follow-up — Cross-skill coherence (2026-07-03)
 
-### M29: Close the coherence gaps — debt readers, forge-flow-shaped stubs, confidence policy note
+### M29: Close the coherence gaps — debt readers, forge-flow-shaped stubs, confidence policy note ✅
 
 **Why:** The cross-skill coherence check (2026-07-03) found three
 divergences. (1) forge-flow registers debt rows with dim `D01`, `D10` or
@@ -1121,16 +1121,34 @@ usually possible in triage), phrased generically — no sibling-skill
 references (the payload stays decoupled).
 
 **Tasks:**
-- [ ] SKILL.md § Findings pipeline: debt-register filter rule for every dimension (D01 contract as single source)
-- [ ] _findings_to_milestones.py: stub template → `## MID: title`, Why/Tasks/Done when, Notes for provenance, no Effort
-- [ ] tests: extend the pytest suite red-first (stub shape asserts: colon heading, "Done when", no "**Effort**" line; content test pinning the pipeline debt rule)
-- [ ] finding-phrasing.md § Severity vs confidence: one-line rationale for the independent-axes policy
-- [ ] Full pytest suite green
-- [ ] Commit & push
-- [ ] Deploy: `./install.sh --target all --force` + `--check` OK on all targets
+- [x] SKILL.md § Findings pipeline: debt-register filter rule for every dimension (D01 contract as single source)
+- [x] _findings_to_milestones.py: stub template → `## MID: title`, Why/Tasks/Done when, Notes for provenance, no Effort
+- [x] tests: extend the pytest suite red-first (stub shape asserts: colon heading, "Done when", no "**Effort**" line; content test pinning the pipeline debt rule)
+- [x] finding-phrasing.md § Severity vs confidence: one-line rationale for the independent-axes policy
+- [x] Full pytest suite green
+- [x] Commit & push
+- [x] Deploy: `./install.sh --target all --force` + `--check` OK on all targets
 
 **Done when:** A D10/D14 debt row demonstrably suppresses/promotes per
 the pipeline rule (fixture walk recorded in Notes); generated stubs parse
 as forge-flow-shaped milestones with no Effort line (pinned by pytest);
 the confidence-policy rationale is one grep-able sentence; suite green;
 deployed to all targets.
+
+**Notes:** Done 2026-07-03, TDD: 3 new tests + 4 updated stub-shape pins
+written first (7 red / 28 green), then the three rules to green (suite
+35/35, ruff clean). Fixture walk (scratchpad, never committed): fake repo
+with `.tech-audit/debt.tsv` holding a D10 row (`app/report.py:42`, O(n)
+report scan, revisit_by 2027-01-01, active) and a D14 row
+(`app/sync.py:88`, non-idempotent retry, revisit_by 2026-01-01, expired);
+under the new pipeline rule a 🟡 D10 finding at `app/report.py` was
+suppressed (`suppressed: 1 findings covered by active debt`) and a 🟡 D14
+finding at `app/sync.py` was promoted to 🔴 "intentional debt expired on
+2026-01-01. Upgrade: …" — exactly per D01's Debt-register cross-reference
+contract, now applied beyond D01. Stub renderer emits `## <MID>: <title>`
+with Why/Tasks/Done when/Notes (provenance = old Source content); Effort
+dropped from stubs and from grouped-yellow task lines, retained in the
+triage table. Rationale sentence grep-able via "triage can usually
+verify" (finding-phrasing.md:35). README debt-bridge line updated to the
+every-dimension scope. Deployed `install.sh --target all --force`;
+`--check` OK for claude, codex, opencode.

@@ -32,7 +32,7 @@ Example:
 ---
 
 ## Severity vs confidence
-Severity (0-4) = how bad if true. Confidence (certain/probable/needs-verification) = how sure. Independent axes. A 4 tagged needs-verification is still a 4 — triage confirms before acting. Never inflate confidence. Optional 7th TSV column.
+Severity (0-4) = how bad if true. Confidence (certain/probable/needs-verification) = how sure. Independent axes. A 4 tagged needs-verification is still a 4: triage can usually verify against the source, so discounting severity for uncertainty would only hide impact. Never inflate confidence. Optional 7th TSV column.
 
 Findings about secrets cite only path:line + variable name — never paste the value. Reports get committed.
 

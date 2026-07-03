@@ -68,14 +68,14 @@ def test_milestone_ids_track_findings_on_unsorted_input() -> None:
     )
     out = run_milestones(tsv, "--prefix", "AUDIT", "--start", "7")
     # Sorted by (severity, dim): the D1 red is AUDIT-7, the D5 red is AUDIT-8.
-    assert "## AUDIT-7 — Dead class" in out
-    assert "## AUDIT-8 — Cross-tenant read" in out
+    assert "## AUDIT-7: Dead class" in out
+    assert "## AUDIT-8: Cross-tenant read" in out
 
 
 def test_milestones_six_column_tsv_roundtrip() -> None:
     tsv = "🔴\tD4\tapp/a.php\tSQL injection\tparametrize\t1h\n"
     out = run_milestones(tsv, "--prefix", "SEC", "--start", "1")
-    assert "## SEC-1 — SQL injection" in out
+    assert "## SEC-1: SQL injection" in out
     assert "Add a regression test" in out
     assert "confidence" not in out  # no 7th column → no confidence noise
 
@@ -83,7 +83,7 @@ def test_milestones_six_column_tsv_roundtrip() -> None:
 def test_milestones_seven_column_tsv_with_confidence() -> None:
     tsv = "🔴\tD4\tapp/a.php\tSQL injection\tparametrize\t1h\tneeds-verification\n"
     out = run_milestones(tsv, "--prefix", "SEC", "--start", "1")
-    assert "## SEC-1 — SQL injection" in out
+    assert "## SEC-1: SQL injection" in out
     assert "confidence: needs-verification" in out
 
 
@@ -93,5 +93,34 @@ def test_d1_prefixed_title_survives_milestone_roundtrip() -> None:
         "remove the adapter\t30m\tcertain\n"
     )
     out = run_milestones(tsv, "--prefix", "M", "--start", "17")
-    assert "## M-17 — delete: unused adapter" in out
+    assert "## M-17: delete: unused adapter" in out
     assert "| **M-17**: delete: unused adapter |" in out
+
+
+def test_stub_shape_matches_devplan_executor() -> None:
+    """M29: stubs parse as executor milestones — Why/Tasks/Done when/Notes, no Effort."""
+    tsv = (
+        "🔴\tD4\tapp/a.php\tSQL injection\tparametrize\t1h\tprobable\n"
+        "🟡\tD2\tdocs/x.md\tDoc drift\tfix doc\t2h\n"
+    )
+    out = run_milestones(tsv, "--prefix", "M", "--start", "30")
+    stubs = out.split("# Milestone stubs", 1)[1]
+    # Heading: `## MID: title`, never the em-dash form.
+    assert "## M-30: SQL injection" in stubs
+    assert "## M-30 —" not in stubs
+    # Executor field set, in the shape the devplan hand-off expects.
+    assert "**Why:**" in stubs
+    assert "**Tasks:**" in stubs
+    assert "- [ ] parametrize" in stubs
+    assert "**Done when:**" in stubs
+    # Provenance lives in Notes (finding location, dim, confidence).
+    assert "**Notes:**" in stubs
+    assert "`app/a.php`" in stubs
+    # No time estimates in stubs; effort stays in the triage table only.
+    assert "**Effort**" not in stubs
+    assert "(2h)" not in stubs
+    # Old field names are gone.
+    for old in ("**Source**", "**Scope**", "**Exit gate**"):
+        assert old not in stubs
+    # Grouped-yellows stub shares the same shape.
+    assert "## AUDIT-D2-followup: D2 🟡 cleanup" in stubs

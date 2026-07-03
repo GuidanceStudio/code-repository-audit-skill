@@ -34,8 +34,9 @@ finding taxonomy. **Runtime dependency:** none; the Ponytail plugin is
 not required. This project does not install its lifecycle hooks,
 persistent modes, or duplicate review/audit skills. Code-audit remains
 authoritative for routing, severity, safety boundaries, findings, and
-forge-flow hand-off. The `.tech-audit/debt.tsv` register that D1
-cross-references may be populated by the forge-flow skill's simplify pass — both skills share that file.
+forge-flow hand-off. The `.tech-audit/debt.tsv` register — cross-referenced by every
+dimension via the findings-pipeline debt filter (contract in D1) — may be
+populated by the forge-flow skill's simplify pass; both skills share that file.
 
 ## Install
 
