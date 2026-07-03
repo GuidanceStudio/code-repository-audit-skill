@@ -1029,7 +1029,7 @@ with this milestone. M27 edits the compressed text directly.
 
 ## Follow-up — Standalone decoupling (2026-07-03)
 
-### M28: Commit the uxui-audit decoupling — standalone payload
+### M28: Commit the uxui-audit decoupling — standalone payload ✅
 
 **Why:** The worktree carries deliberate uncommitted edits (SKILL.md, D12,
 D15, D16) removing every cross-reference to the sibling uxui-audit skill so
@@ -1047,11 +1047,19 @@ supersedes M20's fold-in delegation. M20 itself stays untouched (completed
 milestones are history; this milestone is the record).
 
 **Tasks:**
-- [ ] D12-admin-surface.md: fix the dangling "is the / not covered here" sentence
-- [ ] D16-ui-design-system.md: normalize the continuation-line indents
-- [ ] Test: full pytest suite green with the diff applied (27/27)
-- [ ] Test: `grep -ri uxui tech-audit/` returns nothing (payload only; DEVPLAN excluded)
-- [ ] Commit the 4-file decoupling diff & push
+- [x] D12-admin-surface.md: fix the dangling "is the / not covered here" sentence
+- [x] D16-ui-design-system.md: normalize the continuation-line indents
+- [x] Test: full pytest suite green with the diff applied (27/27)
+- [x] Test: `grep -ri uxui tech-audit/` returns nothing (payload only; DEVPLAN excluded)
+- [x] Commit the 4-file decoupling diff & push
 
 **Done when:** The decoupling diff is committed and pushed with the two
 typos fixed; payload greps clean for `uxui`; pytest green.
+
+**Notes:** Done 2026-07-03. TDD red step not applicable (the decoupling
+diff pre-existed as user-confirmed work; the milestone's contract is the
+pre-existing suite + grep check) — executed as verify-and-commit per the
+IDD fallback. Verified: pytest 27/27, `grep -ri uxui tech-audit/` empty,
+D12 sentence reads "— is not covered here. For a rendered-interface
+review, use a browser-based capture.", D16 continuation lines at column 0.
+Supersedes M20's uxui-audit fold-in delegation; the 0–4 scale survives.

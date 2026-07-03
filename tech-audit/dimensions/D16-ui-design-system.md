@@ -106,13 +106,11 @@ Decorative/long animations, or no `prefers-reduced-motion` guard → 🟡
 
 Source proves the *system*; only a render proves the *result*. When the
 app is runnable with Node + Playwright, use the **shared rendered
-hand-off** (see D15): invoke the `uxui-audit` skill (or its
-`scripts/capture.mjs`) once, and apply its **Visual design** and
-**Responsive** dimensions to the screenshots — that skill owns capture
-and the pixel rubric. Fold findings back tagged `D16`. Both skills
-share the unified 0–4 severity scale; findings fold directly, no
-mapping needed. Run the capture ONCE and split findings between D15
-(usability/state) and D16 (visual/responsive); don't screenshot twice.
+hand-off** (see D15): screenshot the real surfaces via Playwright and apply
+**Visual design** and **Responsive** checks. Fold findings back tagged
+`D16` using the unified 0–4 severity scale. Run the capture ONCE
+and split findings between D15 (usability/state) and D16
+(visual/responsive); don't screenshot twice.
 
 Without a runnable app or Playwright, stay source-level and record the
 rendered pass as **deferred**.
@@ -128,14 +126,13 @@ rendered pass as **deferred**.
 
 - Design tokens enforced (lint rule against raw hex/px in components).
 - Advanced rendered pass clean of severity-3+ visual/responsive
-  findings on every release (via `uxui-audit`).
+  findings on every release.
 - A documented component library; new UI composes it rather than
   restyling.
 
 ## Cross-references
 
 - D15 — UX & interaction (shares the advanced rendered hand-off; run
-  `uxui-audit` capture once, split findings D15/D16).
+  capture once, split findings D15/D16).
 - D12 — admin-surface coherence (label/state consistency overlaps;
   keep a finding in one dimension).
-- `uxui-audit` skill — owns rendered capture + the visual-design rubric.

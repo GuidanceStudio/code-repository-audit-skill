@@ -145,6 +145,5 @@ whose verb mutates state, compared against the public API routes.
 - D6 — operational readiness (runbook for failure scenarios).
 - This dimension audits admin-surface **source** (empty-states, parity,
   failure routing). Rendered UI/UX depth — visual design, WCAG
-  accessibility, responsive behavior on real screenshots — is the
-  `uxui-audit` skill's job, not this one. Point the user there for a
-  rendered-interface review.
+  accessibility, responsive behavior on real screenshots — is not covered
+  here. For a rendered-interface review, use a browser-based capture.

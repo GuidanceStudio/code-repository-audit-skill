@@ -79,14 +79,12 @@ via `scripts/_findings_to_milestones.py`.
 every cut that touches them. **default-deep** run deep when the
 product has the matching surface. **ui-deep** run deep when a UI
 surface is detected (frontend markers per `routing/detect-stack.md`);
-each has a base source-level pass and an advanced rendered pass that
-delegates to the `uxui-audit` skill. **scan** dims go deep only when a
+each has a base source-level pass and an advanced rendered pass. **scan** dims go deep only when a
 🔴 surfaces. **release-only** runs when a tag is being cut.
 
 ## Severity and status
 
-Severity uses the unified 0–4 scale shared with the `uxui-audit` skill
-(they are one family):
+Severity uses the unified 0–4 scale:
 
 | # | Emoji | Label | Bar |
 |---|---|---|---|
