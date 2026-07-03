@@ -975,3 +975,45 @@ SKILL.md for the full registry.
 - [ ] Commit & push
 
 **Done when:** README conveys same information with fewer words.
+
+## v0.5 — Superpowers-derived hardening
+
+### M27: Finding provenance — hedge-word gate, origin-not-symptom locations, fan-out briefs
+
+**Why:** The 🔴 refutation pass is the only verification gate: a
+confident-sounding 🟡 built on a grep hit alone sails through, a hedged
+finding ("probably injectable") can still carry `certain`/`probable`
+confidence, and locations sometimes cite where a defect *manifests* rather
+than where it *originates*. The fan-out section in `cuts/full.md` says to
+parallelize by dimension but not what each agent must receive, so briefs
+drift. Distilled from `obra/superpowers` (verification-before-completion,
+root-cause-tracing, dispatching-parallel-agents).
+
+**Approach:** `templates/finding-phrasing.md`: (1) calibration — hedge words
+in a finding body ("probably", "likely", "may", "seems") force
+`confidence: needs-verification` or a rewrite to the observed fact;
+(2) location rule — cite the origin of the defect (trace the bad
+value/config back through the boundary), not the site where it surfaces;
+name the symptom site in the fix when useful. `SKILL.md` § Findings
+pipeline: (3) a 🟡 requires the cited code path actually read — a
+grep/pattern match alone caps confidence at `needs-verification`.
+`cuts/full.md` § fan-out: (4) specify the per-dimension agent brief —
+dimension file + matching language files + precomputed inventory + TSV
+schema, output-only contract (return rows, modify nothing) — and dispatch
+all agents in a single response.
+
+**Tasks:**
+- [ ] finding-phrasing.md: hedge-word → needs-verification calibration
+- [ ] finding-phrasing.md: origin-not-symptom location rule
+- [ ] SKILL.md § Findings pipeline: 🟡 code-path-read requirement
+- [ ] cuts/full.md: agent brief contents + single-response dispatch
+- [ ] Test: sample — a hedged 🟡 finding cannot carry `certain`/`probable` under the new phrasing rules
+- [ ] Commit & push
+
+**Done when:** All four rules are present; the sample hedged finding is
+forced to `needs-verification` or rewritten to the observed fact.
+
+**Notes:** The v0.4 compression (M22–M26) is already committed (`2ebc907`)
+even though those checkboxes still show unchecked — reconcile that
+bookkeeping (verify each Done-when, tick, mark headings) before or together
+with this milestone. M27 edits the compressed text directly.
