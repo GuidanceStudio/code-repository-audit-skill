@@ -58,7 +58,7 @@ The complete multi-dimension tech-DD report.
 
 ## Execution: fan-out when subagents are available
 
-Parallelize by dimension. Pre-compute repo inventory once (stack detection + git-churn heatmap + file inventory). One agent per dimension (skip release-only D10 unless tagging). Merge TSV rows, dedup cross-dimension overlaps (most-specific dimension wins), verify 🔴s independently per `SKILL.md` § Findings pipeline, assemble report. Sequential fallback: run dimensions in registry order, appending to `findings.tsv` after each. Scope, not clock — run each dimension's method catalog to exhaustion, sampling top-N churn-heatmap files.
+Parallelize by dimension. Pre-compute repo inventory once (stack detection + git-churn heatmap + file inventory). One agent per dimension (skip release-only D10 unless tagging); each brief carries its `dimensions/D<N>-*.md` + matching `languages/*.md` + the precomputed inventory + the TSV schema, output-only contract (return rows, modify nothing); dispatch all agents in a single response. Merge TSV rows, dedup cross-dimension overlaps (most-specific dimension wins), verify 🔴s independently per `SKILL.md` § Findings pipeline, assemble report. Sequential fallback: run dimensions in registry order, appending to `findings.tsv` after each. Scope, not clock — run each dimension's method catalog to exhaustion, sampling top-N churn-heatmap files.
 
 ## Output
 

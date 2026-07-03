@@ -13,6 +13,8 @@ How to communicate findings. Used across every cut. Tone calibration matters as 
 ## Finding format
 🔴 path:line — <factual what>. _Why_: <1-line impact>. _Fix_: <1-2 lines concrete change>. For 🔴 only: _Threat_: link to threat-models/<file>.md.
 
+Location cites where the defect *originates* — trace the bad value/config back through the boundary — not the site where it surfaces; name the symptom site in the fix when useful.
+
 ## D1 essentiality prefixes
 
 D1 finding titles start with exactly one prefix from the essentiality
@@ -37,6 +39,7 @@ Findings about secrets cite only path:line + variable name — never paste the v
 ---
 
 ## Calibrations
+- Hedge words in the body ("probably", "likely", "may", "seems") force confidence: needs-verification — or rewrite to the observed fact.
 - Correct code but missing test → 🟡 (not 🔴). The bug doesn't exist yet.
 - Style preference → 🟢 if at all. Don't manufacture findings on a clean PR.
 - Pattern repeated ×50 → ONE finding + appendix, not 50 individual items.

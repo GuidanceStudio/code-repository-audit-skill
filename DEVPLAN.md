@@ -986,7 +986,7 @@ SKILL.md for the full registry.
 
 ## v0.5 — Superpowers-derived hardening
 
-### M27: Finding provenance — hedge-word gate, origin-not-symptom locations, fan-out briefs
+### M27: Finding provenance — hedge-word gate, origin-not-symptom locations, fan-out briefs ✅
 
 **Why:** The 🔴 refutation pass is the only verification gate: a
 confident-sounding 🟡 built on a grep hit alone sails through, a hedged
@@ -1011,12 +1011,12 @@ schema, output-only contract (return rows, modify nothing) — and dispatch
 all agents in a single response.
 
 **Tasks:**
-- [ ] finding-phrasing.md: hedge-word → needs-verification calibration
-- [ ] finding-phrasing.md: origin-not-symptom location rule
-- [ ] SKILL.md § Findings pipeline: 🟡 code-path-read requirement
-- [ ] cuts/full.md: agent brief contents + single-response dispatch
-- [ ] Test: sample — a hedged 🟡 finding cannot carry `certain`/`probable` under the new phrasing rules
-- [ ] Commit & push
+- [x] finding-phrasing.md: hedge-word → needs-verification calibration
+- [x] finding-phrasing.md: origin-not-symptom location rule
+- [x] SKILL.md § Findings pipeline: 🟡 code-path-read requirement
+- [x] cuts/full.md: agent brief contents + single-response dispatch
+- [x] Test: sample — a hedged 🟡 finding cannot carry `certain`/`probable` under the new phrasing rules
+- [x] Commit & push
 
 **Done when:** All four rules are present; the sample hedged finding is
 forced to `needs-verification` or rewritten to the observed fact.
@@ -1026,6 +1026,16 @@ even though those checkboxes still show unchecked — reconcile that
 bookkeeping (verify each Done-when, tick, mark headings) before or together
 with this milestone. M27 edits the compressed text directly.
 *(Update 2026-07-03: bookkeeping reconciled.)*
+
+Done 2026-07-03, TDD: `tests/test_provenance_contract.py` written first
+(4 tests red), then the four one/two-line rules to green (suite 31/31,
+ruff clean). Sample check: `🟡 ReportController.php:88 — $sort is
+probably injectable into the raw orderBy() clause` — "probably" trips the
+hedge-word calibration, forcing `confidence: needs-verification` or a
+rewrite to the observed fact ("$sort flows from the request into
+orderBy() with no allowlist"); if grep-sourced without the path read, the
+SKILL.md 🟡 rule caps it at needs-verification regardless. Redeployed:
+`install.sh --target claude --force` then `--check` OK.
 
 ## Follow-up — Standalone decoupling (2026-07-03)
 

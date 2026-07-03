@@ -104,6 +104,7 @@ Long audits outlive a single context window. Persist as you go, verify before em
 - **Incremental TSV.** Write to `.tech-audit/work/<YYYY-MM-DD>/findings.tsv`: schema `severity⇥dim⇥location⇥title⇥fix⇥effort⇥confidence` (6 or 7 columns). Append at the close of each dimension — survives compaction, resumable. Assemble the final report from this file, not memory. `quick`/`security` stay inline.
 - **Resume.** If today's `findings.tsv` exists, read it, skip dimensions already represented, continue.
 - **Refute every 🔴.** Re-read the actual code path and prove it wrong: is auth handled upstream? is the path dead? is validation done elsewhere? Refuted → drop/downgrade. Can't verify without runtime → mark `confidence: needs-verification`. Mandatory for 🔴 — single biggest false-positive reducer.
+- **🟡 requires the cited code path read.** A grep/pattern match alone caps confidence at `needs-verification`.
 - **Milestone prefix.** Match the target devplan's ID scheme: `scripts/_findings_to_milestones.py --prefix M --start <next>`. Don't default to `AUDIT`.
 
 ### Repeat-audit memory
