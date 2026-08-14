@@ -81,7 +81,6 @@ def test_agents_writes_pointer_idempotently(tmp_path: Path) -> None:
     agents = proj / "AGENTS.md"
     assert agents.is_file()
     assert "tech-audit:start" in agents.read_text()
-    # Second run must not duplicate the block.
     run_install(tmp_path, "--force", "--target", "agents", "--agents-dir", str(proj))
     assert agents.read_text().count("tech-audit:start") == 1
 
@@ -92,5 +91,4 @@ def test_manual_prints_payload_path(tmp_path: Path) -> None:
     res = run_install(tmp_path, "--target", "manual")
     assert res.returncode == 0
     assert "tech-audit" in res.stdout
-    # manual writes nothing
     assert not (tmp_path / ".claude").exists()

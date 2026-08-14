@@ -1152,3 +1152,25 @@ triage table. Rationale sentence grep-able via "triage can usually
 verify" (finding-phrasing.md:35). README debt-bridge line updated to the
 every-dimension scope. Deployed `install.sh --target all --force`;
 `--check` OK for claude, codex, opencode.
+
+## Follow-up — Test comment cleanup (2026-08-14)
+
+### M30: Remove narrative comments from tests ✅
+
+**Why:** Several test comments only restated the assertion on the next
+line, adding no information the assertion and its surrounding test name
+didn't already carry.
+
+**Approach:** Delete restating comments in `tests/test_install.py`,
+`tests/test_provenance_contract.py`, and `tests/test_scripts.py`. Keep
+comments that explain a non-obvious fact the assertion string doesn't
+show on its own (e.g. why a specific ID is expected, why a field stays
+absent).
+
+**Tasks:**
+- [x] Remove restating comments from the three test files
+- [x] Full pytest suite green
+- [x] Commit & push
+
+**Done when:** the three files carry no comment that merely restates
+the assertion immediately below it; suite stays green.

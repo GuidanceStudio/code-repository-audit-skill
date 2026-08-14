@@ -105,10 +105,8 @@ def test_stub_shape_matches_devplan_executor() -> None:
     )
     out = run_milestones(tsv, "--prefix", "M", "--start", "30")
     stubs = out.split("# Milestone stubs", 1)[1]
-    # Heading: `## MID: title`, never the em-dash form.
     assert "## M-30: SQL injection" in stubs
     assert "## M-30 —" not in stubs
-    # Executor field set, in the shape the devplan hand-off expects.
     assert "**Why:**" in stubs
     assert "**Tasks:**" in stubs
     assert "- [ ] parametrize" in stubs
@@ -119,7 +117,6 @@ def test_stub_shape_matches_devplan_executor() -> None:
     # No time estimates in stubs; effort stays in the triage table only.
     assert "**Effort**" not in stubs
     assert "(2h)" not in stubs
-    # Old field names are gone.
     for old in ("**Source**", "**Scope**", "**Exit gate**"):
         assert old not in stubs
     # Grouped-yellows stub shares the same shape.

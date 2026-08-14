@@ -34,7 +34,6 @@ def test_phrasing_gates_hedge_words_to_needs_verification() -> None:
 
 
 def test_phrasing_requires_origin_not_symptom_locations() -> None:
-    # The rule must couple both: cite the origin, name the symptom in the fix.
     fmt = _section(PHRASING.read_text(), "## Finding format")
     assert "originate" in fmt
     assert "symptom" in fmt
@@ -76,5 +75,4 @@ def test_fanout_specifies_agent_brief_and_single_dispatch() -> None:
     assert "languages/" in fanout
     assert "TSV schema" in fanout
     assert "inventory" in fanout
-    # Output-only contract: agents return rows, they modify nothing.
     assert "modify nothing" in fanout
