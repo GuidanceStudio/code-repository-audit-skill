@@ -15,6 +15,32 @@ line in the body), so they don't meet the archiving gate. Ordered by milestone
 number (M20/M27-29 ship later, on 2026-07-03, than the M22-26 block they sit
 between chronologically).
 
+## Section context kept out of the compression
+
+The archiving pass removed the section headers whose milestones all closed. Two
+paragraphs under them were not milestone detail but the decisions the sections
+were built on, so they are kept here verbatim rather than compressed away.
+
+**v0.3 — Generic packaging + UX/UI depth.** Two arcs from the 2026-06-10
+discussion. *Packaging:* the skill was nested under `claude/code-audit/` and
+worded for Claude; research confirmed `SKILL.md` is a cross-assistant standard
+(agentskills.io — Claude Code, Codex CLI, opencode all read the same folder
+verbatim), so flattening + de-Claudizing makes one payload installable
+everywhere, with a root installer that targets each assistant. *Content:* the
+framework had no dedicated UX or UI dimension (D12 is admin-surface source only
+and defers rendered review to the `ui-review` skill); a UX level and a UI level
+were added, each source-level by default with an advanced rendered pass
+(Playwright, delegated to `ui-review`).
+
+**User decisions (2026-06-10):** installer = **broad** (native `SKILL.md` for
+Claude + Codex + opencode, TOML for Gemini, generated `AGENTS.md` for the
+Cursor/Windsurf/Copilot/Aider/Continue tier, plus a manual-copy path); UX/UI =
+**hybrid** (base source-level always; advanced fires Playwright via
+`ui-review`). Order followed: M10 → M11 → M12 (packaging first, so content
+lands on the flat generic layout) → M13 → M14.
+
+## Milestones
+
 M10 | Flatten the layout | 2026-06-10 | ddbb263
 M11 | De-Claudize the content | 2026-06-10 | 56799e1
 M12 | Root multi-assistant installer | 2026-06-10 | 947217c
